@@ -1,0 +1,35 @@
+{
+  "name": "kitchen_can_trash (pick up can on table near wall, place in trash)",
+  "grid": { "width": 7, "height": 5 },
+  "agent": { "start": [1, 1] },
+  "objects": [
+    {
+      "id": "table", "position": [3, 3],
+      "components": { "surface": {}, "barrier": {} }
+    },
+    {
+      "id": "soda_can", "position": [3, 2],
+      "components": { "pickupable": {}, "placeable": {}, "relation": { "on": "table" } }
+    },
+    {
+      "id": "trash_bin", "position": [5, 2],
+      "components": { "receptacle": { "accepts": ["placeable"] } }
+    }
+  ],
+  "invariants": [
+    { "op": "exists", "object": "table" },
+    { "op": "exists", "object": "soda_can" },
+    { "op": "exists", "object": "trash_bin" },
+    { "op": "has_component", "object": "table", "component": "surface" },
+    { "op": "near", "object": "soda_can", "target": "table", "within": 1 },
+    { "op": "near_wall", "object": "table", "within": 1 },
+    { "op": "reachable", "agent": "agent", "target": "trash_bin" }
+  ],
+  "goal": {
+    "op": "reward_iff",
+    "of": { "op": "ordered", "of": [
+      { "op": "acquired", "object": "soda_can" },
+      { "op": "placed_in", "object": "soda_can", "receptacle": "trash_bin" }
+    ] }
+  }
+}

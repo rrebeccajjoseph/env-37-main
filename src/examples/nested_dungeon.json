@@ -1,0 +1,37 @@
+{
+  "name": "nested_dungeon (key -> door -> treasure behind obstacle)",
+  "grid": { "width": 12, "height": 5 },
+  "walls": [[5, 1], [5, 3]],
+  "agent": { "start": [1, 1] },
+  "objects": [
+    { "id": "brass_key", "position": [2, 2], "components": { "pickupable": {} } },
+    {
+      "id": "oak_door", "position": [5, 2], "state": { "locked": true },
+      "components": {
+        "stateful": {},
+        "barrier": { "while": { "attr": "locked", "equals": true } },
+        "trigger": { "on": "use", "requires": ["brass_key"],
+                     "effects": [{ "target": "self", "set": { "locked": false } }],
+                     "event": "unlock" }
+      }
+    },
+    { "id": "rubble", "position": [9, 2], "components": { "barrier": {} } },
+    { "id": "treasure", "position": [10, 2], "components": { "goal": {} } }
+  ],
+  "invariants": [
+    { "op": "exists", "object": "brass_key" },
+    { "op": "exists", "object": "oak_door" },
+    { "op": "exists", "object": "treasure" },
+    { "op": "has_component", "object": "oak_door", "component": "barrier" },
+    { "op": "reachable", "agent": "agent", "target": "brass_key" },
+    { "op": "reachable", "agent": "agent", "target": "treasure" }
+  ],
+  "goal": {
+    "op": "reward_iff",
+    "of": { "op": "ordered", "of": [
+      { "op": "acquired", "object": "brass_key" },
+      { "op": "state_changed", "object": "oak_door", "attr": "locked", "from": true, "to": false },
+      { "op": "at", "agent": "agent", "target": "treasure" }
+    ] }
+  }
+}

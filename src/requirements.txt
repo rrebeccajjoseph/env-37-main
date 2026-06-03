@@ -1,0 +1,10 @@
+# Forge-2D core logic is pure standard library.
+# Runtime dependency for the visual renderer:
+pygame>=2.0     # default visual renderer (use --no-render to skip)
+
+# LLM authoring + high-level policy (--author llm/auto, --agent llm, improve).
+# Only used when ANTHROPIC_API_KEY is set; the parser path stays keyless.
+anthropic>=0.40
+
+# Test runner:
+pytest>=8.0

@@ -1,0 +1,28 @@
+{
+  "name": "leaky (door can be walked around — should be sealed)",
+  "grid": { "width": 8, "height": 5 },
+  "walls": [[4, 1]],
+  "agent": { "start": [1, 2] },
+  "objects": [
+    { "id": "key", "position": [2, 2], "components": { "pickupable": {} } },
+    {
+      "id": "door", "position": [4, 2], "state": { "locked": true },
+      "components": {
+        "stateful": {},
+        "barrier": { "while": { "attr": "locked", "equals": true } },
+        "trigger": { "on": "use", "requires": ["key"],
+                     "effects": [{ "target": "self", "set": { "locked": false } }],
+                     "event": "unlock" }
+      }
+    },
+    { "id": "treasure", "position": [6, 2], "components": { "goal": {} } }
+  ],
+  "goal": {
+    "op": "reward_iff",
+    "of": { "op": "ordered", "of": [
+      { "op": "acquired", "object": "key" },
+      { "op": "state_changed", "object": "door", "attr": "locked", "from": true, "to": false },
+      { "op": "at", "agent": "agent", "target": "treasure" }
+    ] }
+  }
+}

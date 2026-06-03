@@ -1,0 +1,57 @@
+{
+  "name": "maze (key, locked door, switch, bridge, treasure)",
+  "grid": { "width": 14, "height": 7 },
+  "walls": [
+    [4, 1], [4, 2], [4, 4], [4, 5],
+    [9, 1], [9, 2], [9, 4], [9, 5]
+  ],
+  "agent": { "start": [1, 1] },
+  "objects": [
+    { "id": "iron_key", "position": [2, 4], "components": { "pickupable": {} } },
+    {
+      "id": "gate", "position": [4, 3], "state": { "locked": true },
+      "components": {
+        "stateful": {},
+        "barrier": { "while": { "attr": "locked", "equals": true } },
+        "trigger": { "on": "use", "requires": ["iron_key"],
+                     "effects": [{ "target": "self", "set": { "locked": false } }],
+                     "event": "unlock" }
+      }
+    },
+    {
+      "id": "lever", "position": [7, 1],
+      "components": {
+        "trigger": { "on": "enter",
+                     "effects": [{ "target": "drawbridge", "set": { "raised": true } }] }
+      }
+    },
+    {
+      "id": "drawbridge", "position": [9, 3], "state": { "raised": false },
+      "components": {
+        "stateful": {},
+        "barrier": { "while": { "attr": "raised", "equals": false } }
+      }
+    },
+    { "id": "treasure", "position": [11, 3], "components": { "goal": {} } }
+  ],
+  "invariants": [
+    { "op": "exists", "object": "iron_key" },
+    { "op": "exists", "object": "gate" },
+    { "op": "exists", "object": "lever" },
+    { "op": "exists", "object": "drawbridge" },
+    { "op": "exists", "object": "treasure" },
+    { "op": "has_component", "object": "lever", "component": "trigger" },
+    { "op": "has_component", "object": "drawbridge", "component": "barrier" },
+    { "op": "reachable", "agent": "agent", "target": "iron_key" },
+    { "op": "reachable", "agent": "agent", "target": "treasure" }
+  ],
+  "goal": {
+    "op": "reward_iff",
+    "of": { "op": "ordered", "of": [
+      { "op": "acquired", "object": "iron_key" },
+      { "op": "state_changed", "object": "gate", "attr": "locked", "from": true, "to": false },
+      { "op": "state_changed", "object": "drawbridge", "attr": "raised", "from": false, "to": true },
+      { "op": "at", "agent": "agent", "target": "treasure" }
+    ] }
+  }
+}

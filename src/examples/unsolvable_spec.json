@@ -1,0 +1,13 @@
+{
+  "name": "unsolvable (treasure walled off — should self-repair)",
+  "grid": { "width": 8, "height": 5 },
+  "walls": [[4, 1], [4, 2], [4, 3]],
+  "agent": { "start": [1, 2] },
+  "objects": [
+    { "id": "treasure", "position": [6, 2], "components": { "goal": {} } }
+  ],
+  "goal": {
+    "op": "reward_iff",
+    "of": { "op": "at", "agent": "agent", "target": "treasure" }
+  }
+}

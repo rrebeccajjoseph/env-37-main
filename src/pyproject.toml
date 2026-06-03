@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "forge2d"
+version = "0.1.0"
+description = "Code-Verified Infinite Environment Harness for embodied agent evaluation"
+requires-python = ">=3.9"
+dependencies = []  # core logic is pure standard library
+
+[project.optional-dependencies]
+render = ["pygame>=2.0"]   # default CLI renderer (skip with --no-render)
+test = ["pytest>=8.0"]
+llm = ["anthropic>=0.40"]
+
+[project.scripts]
+forge2d = "forge2d.cli:main"
+
+[tool.setuptools]
+packages = ["forge2d"]

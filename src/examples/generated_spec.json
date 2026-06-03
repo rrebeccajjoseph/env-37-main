@@ -1,0 +1,43 @@
+{
+  "name": "key_door_treasure (generic components, no hardcoded types)",
+  "grid": { "width": 12, "height": 5 },
+  "walls": [[6, 1], [6, 3]],
+  "agent": { "start": [1, 1] },
+  "objects": [
+    {
+      "id": "blue_key",
+      "position": [3, 2],
+      "components": { "pickupable": {} }
+    },
+    {
+      "id": "green_door",
+      "position": [6, 2],
+      "state": { "locked": true },
+      "components": {
+        "stateful": {},
+        "barrier": { "while": { "attr": "locked", "equals": true } },
+        "trigger": {
+          "on": "use",
+          "requires": ["blue_key"],
+          "effects": [{ "target": "self", "set": { "locked": false } }]
+        }
+      }
+    },
+    {
+      "id": "treasure",
+      "position": [10, 2],
+      "components": { "goal": {} }
+    }
+  ],
+  "goal": {
+    "op": "reward_iff",
+    "of": {
+      "op": "ordered",
+      "of": [
+        { "op": "acquired", "object": "blue_key" },
+        { "op": "state_changed", "object": "green_door", "attr": "locked", "from": true, "to": false },
+        { "op": "at", "agent": "agent", "target": "treasure" }
+      ]
+    }
+  }
+}
