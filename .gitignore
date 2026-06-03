@@ -222,3 +222,4 @@ __pycache__/
 
 # Local Claude Code agent state
 .claude/
+.DS_Store
