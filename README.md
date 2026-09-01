@@ -212,13 +212,6 @@ failed sub-goal, repairs the generated world, and reruns validation.
 
 Inspired by: [Era of Experience](https://storage.googleapis.com/deepmind-media/Era-of-Experience%20/The%20Era%20of%20Experience%20Paper.pdf) and Agent-World
 
-## If I Had More Time
-
-I wanted to get this back to the team as quickly as possible, but if I had more time, I’d be interested in exploring a more JEPA-inspired hierarchical environment generation path. Inspired by this [paper I read this morning](https://arxiv.org/abs/2605.27734). The question I would want to explore is: (1) can agents learn reusable latent structure over environments, and (2) can environment generation become extremely data-efficient, allowing us to build robust worlds that capture the underlying manifold structure rather than merely sampling variations at the leaf nodes? 
-
-The paper argues that hierarchical latent prediction can reduce sample complexity from M^(L+1) to M³, independent of depth. Applied here, the harness could learn the compositional grammar of playable environments instead of generating shallow variations, enabling harder and more sample-efficient worlds.
-
-
 ## Tests And Prompts
 
 These prompts demonstrate the main capabilities of the harness. They use
